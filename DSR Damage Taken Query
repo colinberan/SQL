@@ -1,0 +1,14 @@
+/* Query used to export relevant columns from gathered damage taken data and rename columns to make them more clearly understood. */
+
+SELECT data__source__name AS Source,
+data__source__id AS ID,
+data__target__name AS Target,
+data__target__type AS [Target Job],
+data__ability__name AS Action,
+data__ability__type AS [Action Type],
+data__amount AS [Damage Taken],
+data__mitigated AS [Damage Mitigated],
+data__unmitigatedAmount AS [Unmitigated Amount],
+data__absorbed AS [Damage Absorbed],
+data__blocked AS [Damage Blocked]
+FROM dbo.[DSR Damage Taken]
