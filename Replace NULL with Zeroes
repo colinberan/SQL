@@ -1,0 +1,19 @@
+/* Given a table with one or more columns featuring NULL values that we wish to convert to 0, we can update the table to replace these values
+using a SQL query. */
+
+UPDATE dbo.[DSR Damage Taken]
+SET data__amount = COALESCE(data__amount, 0),
+	data__mitigated = COALESCE(data__mitigated, 0),
+	data__unmitigatedAmount = COALESCE(data__unmitigatedAmount, 0),
+	data__blocked = COALESCE(data__blocked, 0),
+	data__absorbed = COALESCE(data__absorbed, 0) 
+SELECT * FROM dbo.[DSR Damage Taken];
+
+/* If instead we just want to replace NULL values in a query and leave the table alone, a different query can be used. */
+
+SELECT COALESCE(data__amount, 0) as [Damage Taken], 
+COALESCE(data__mitigated, 0) as [Damage Mitigated],
+COALESCE(data__unmitigatedAmount, 0) as [Unmitigated Amount],
+COALESCE(data__blocked, 0) as [Damage Blocked],
+COALESCE(data__absorbed, 0) as [Damage Absorbed]
+FROM dbo.[DSR Damage Taken];
