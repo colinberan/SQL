@@ -11,4 +11,41 @@ data__mitigated AS [Damage Mitigated],
 data__unmitigatedAmount AS [Unmitigated Amount],
 data__absorbed AS [Damage Absorbed],
 data__blocked AS [Damage Blocked]
+FROM dbo.[DSR Damage Taken];
+
+/* During the exploration, I removed all instances of "Superbolide" as it was self-inflicted damage and "Morn Afah's Edge" as it is the fight enrage.
+The same could be done using SQL with the following query: */
+
+SELECT data__source__name AS Source,
+data__source__id AS ID,
+data__target__name AS Target,
+data__target__type AS [Target Job],
+data__ability__name AS Action,
+data__ability__type AS [Action Type],
+data__amount AS [Damage Taken],
+data__mitigated AS [Damage Mitigated],
+data__unmitigatedAmount AS [Unmitigated Amount],
+data__absorbed AS [Damage Absorbed],
+data__blocked AS [Damage Blocked]
 FROM dbo.[DSR Damage Taken]
+WHERE data__ability__name NOT IN ('Superbolide','Morn Afah''s Edge');
+
+/* During the exploration, I discovered that all rows with "Action Type" value of 128 are considered physical damage and all rows with value 1024 are 
+considered magic damage. In the notebook I separated all physical attacks out, but in this case I will use SQL to view magic damage specifically as 
+well as the previous restrictions. */
+
+SELECT data__source__name AS Source,
+data__source__id AS ID,
+data__target__name AS Target,
+data__target__type AS [Target Job],
+data__ability__name AS Action,
+data__ability__type AS [Action Type],
+data__amount AS [Damage Taken],
+data__mitigated AS [Damage Mitigated],
+data__unmitigatedAmount AS [Unmitigated Amount],
+data__absorbed AS [Damage Absorbed],
+data__blocked AS [Damage Blocked]
+FROM dbo.[DSR Damage Taken]
+WHERE data__ability__name NOT IN ('Superbolide','Morn Afah''s Edge')
+AND data__ability__type = 1024;
+
