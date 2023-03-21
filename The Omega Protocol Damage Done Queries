@@ -1,0 +1,83 @@
+client = bigquery.Client(project='the-omega-protocol')
+
+
+# This initial first section of queries here are updating all target_name values with a particular target_id value to be in a more readable state.
+# In this data, "target_name" represents the name of the target that is receiving an instance of damage dealt by the player. 
+# Because of the way The Omega Protocol (Ultimate) is structured, the players are battling multiple versions of the enemy "Omega" so I'll be
+# renaming some of those to make the results less confusing. To do this, I'll be using the "target_id" value which is different for each target regardless of the name of that target.
+
+query1 = """
+    UPDATE `the-omega-protocol.Omega_Damage_Done.Omega_Damage_Done`
+    SET target_name = 'Phase 1: Omega'
+    WHERE target_id = 12;
+    """
+query2 = """
+    UPDATE `the-omega-protocol.Omega_Damage_Done.Omega_Damage_Done`
+    SET target_name = 'Phase 2: Omega-M/F'
+    WHERE target_id IN (21, 22);
+"""
+query3 = """
+    UPDATE `the-omega-protocol.Omega_Damage_Done.Omega_Damage_Done`
+    SET target_name = 'Phase 3: Omega Reconfigured'
+    WHERE target_id = 28 AND timestamp < 10897327;
+"""
+query4 = """
+    UPDATE `the-omega-protocol.Omega_Damage_Done.Omega_Damage_Done`
+    SET target_name = 'Phase 4: Blue Screen'
+    WHERE target_id = 28 AND timestamp > 10897327;
+"""
+query5 = """
+    UPDATE `the-omega-protocol.Omega_Damage_Done.Omega_Damage_Done`
+    SET target_name = 'Phase 5: Run Dynamis'
+    WHERE target_id = 34;
+"""
+query6 = """
+    UPDATE `the-omega-protocol.Omega_Damage_Done.Omega_Damage_Done`
+    SET target_name = 'Phase 6: Alpha Omega'
+    WHERE target_id = 41;
+"""
+
+# This next section will be deleting a couple of target_name values, namely "cosmo meteor" and "cosmo comet".
+# These two targets are irrelevant to the fight and take very little damage themselves, so I feel that their addition is unnecessary.
+
+query7 = """
+    DELETE FROM `the-omega-protocol.Omega_Damage_Done.Omega_Damage_Done`
+    WHERE target_id IN (47, 48);
+"""
+
+# Now that I've updated the target_name values, I have a few source_name values to update.
+# The source_name column is, put simply, the name of the source that is dealing a particular instance of damage.
+# Many of the players in this dataset have damage sources that are classified as "pet" and if I don't rename these values,
+# that particular instance of damage will not be attributed to the player.
+
+query8 = """
+    UPDATE `the-omega-protocol.Omega_Damage_Done.Omega_Damage_Done`
+    SET source_name = 'Aylen Ordel'
+    WHERE source_name = 'Earthly Star';
+"""
+query9 = """
+    UPDATE `the-omega-protocol.Omega_Damage_Done.Omega_Damage_Done`
+    SET source_name = 'Wrath Ocean'
+    WHERE source_name = 'bunshin';
+"""
+query10 = """
+    UPDATE `the-omega-protocol.Omega_Damage_Done.Omega_Damage_Done`
+    SET source_name = 'Arnus Solumn'
+    WHERE source_name = 'Esteem';
+"""
+query11 = """
+    UPDATE `the-omega-protocol.Omega_Damage_Done.Omega_Damage_Done`
+    SET source_name = 'Animorpher Arellano'
+    WHERE source_name IN ('Demi-Bahamut','Demi-Phoenix','Ruby Ifrit','Emerald Garuda','Topaz Titan');
+"""
+
+# To make sure I have everything here right, I'll run a quick check on all the source_name values and I should only get 9 distinct values.
+# Those values being the eight players and "Limit Break".
+
+query = """
+    SELECT DISTINCT(source_name) FROM `the-omega-protocol.Omega_Damage_Done.Omega_Damage_Done`;
+"""
+
+results = client.query(query)
+df = results.to_dataframe()
+print(df)
