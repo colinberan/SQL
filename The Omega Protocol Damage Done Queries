@@ -81,3 +81,18 @@ query = """
 results = client.query(query)
 df = results.to_dataframe()
 print(df)
+
+# For the purposes of creating dashboards, I'm going to make a subset of the data with only the information I care about 
+# as well as some more visually appealing column names.
+
+query = """
+    SELECT source_name AS Player,
+    target_name AS Phase,
+    ability_name AS Ability,
+    unmitigatedAmount AS Damage
+    FROM `the-omega-protocol.Omega_Damage_Done.Omega_Damage_Done`;
+"""
+
+results = client.query(query)
+df = results.to_dataframe()
+print(df)
