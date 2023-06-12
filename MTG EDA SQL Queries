@@ -1,0 +1,30 @@
+--I wrote this query because I had a great set of MTG card data, but unfortunately I didn't have any information on the release dates of each card, so I used a second set of data that contained the 
+--release date of each card set and joined it on my original data set so I had a "releaseDate" column for every single card.
+
+SELECT c.id, 
+c.artist, 
+c.colorIdentity, 
+c.colors, 
+c.manaValue,
+c.flavorText, 
+c.frameVersion, 
+c.isOversized,
+c.isPromo,
+c.isOnlineOnly,
+c.isFunny,
+c.keywords, 
+c.manaCost, 
+c.name, 
+c.power,
+c.printings, 
+c.rarity,
+c.setCode, 
+c.subtypes,
+c.text, 
+c.toughness, 
+c.type, 
+c.types, 
+c.uuid,
+s.releaseDate FROM `mtg-data-388201.cards.cards` AS c
+LEFT JOIN `mtg-data-388201.cards.sets` AS s
+ON c.setCode = s.code;
